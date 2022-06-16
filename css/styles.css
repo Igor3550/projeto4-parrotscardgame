@@ -44,6 +44,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform .5s;
+}
+.virar{
+  transform: rotateY(180deg);
 }
 .carta img{
   width: 100px;
