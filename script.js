@@ -1,12 +1,23 @@
 let numCartas;
 const listaCartas = ['bobrossparrot.gif', 'explodyparrot.gif', 'fiestaparrot.gif', 'metalparrot.gif', 'revertitparrot.gif', 'tripletsparrot.gif', 'unicornparrot.gif' ]
 let listaCombinacao;
+
 function verificarNum(numero){
   if(numero >= 4 && numero <= 14 && (numero%2 === 0)){
     return true;
   }
   return false;
 }
+
+function comparador() { 
+	return Math.random() - 0.5; 
+}
+
+function embaralharDeck(listCartas){
+  const novaLista = listCartas.sort(comparador);
+  return novaLista;
+}
+
 
 function pegarElemento(classe){
   const elemento = document.querySelector(classe);
@@ -15,9 +26,28 @@ function pegarElemento(classe){
 
 function adicionarCartas(qntde){
   const areaCartas = pegarElemento('.area-cartas .cartas');
-  for(let i=0; i<qntde; i++){
-    areaCartas.innerHTML += `<div class="carta" onclick="revelarCarta(this)"><img class="" src="/assets/front.png" alt="piriquito"><img class="esconder" src="/assets/unicornparrot.gif" alt="piriquito"></div>`;
+
+  let deckFinal = [];
+  let deckEmbaralhado = embaralharDeck(listaCartas).slice(0, (qntde/2));//pega a metade da qntde de carta no deck embaralhado 
+
+  for(let i=0; i<deckEmbaralhado.length; i++){
+    deckFinal.push(deckEmbaralhado[i]);
+    deckFinal.push(deckEmbaralhado[i]);
   }
+
+  embaralharDeck(deckFinal);
+
+  console.log(deckFinal)
+
+  for(let i=0; i<qntde; i++){
+    areaCartas.innerHTML += `
+      <div class="carta" onclick="revelarCarta(this)">
+        <img class="" src="/assets/front.png">
+        <img class="esconder }" src="/assets/${deckFinal[i]}">
+      </div>
+    `;
+  }
+
 }
 
 function revelarCarta(carta){
@@ -29,27 +59,5 @@ do{
   numCartas = prompt("Com quantas cartas você deseja jogar?");
 }while(verificarNum(numCartas) == false);
 
-switch (numCartas) {
-  case 4:
-    
-    break;
-  case 6:
-  
-    break;
-  case 8:
 
-    break;
-  case 10:
-
-    break;
-  case 12:
-
-    break;
-  case 14:
-
-    break;
-                                            
-  default:
-    break;
-}
 adicionarCartas(numCartas);
