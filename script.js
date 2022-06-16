@@ -1,7 +1,15 @@
-let numCartas;
+let numCartas, acertos=0, jogadas=0;
 let cartaSelecionada = '';
-const listaCartas = ['bobrossparrot.gif', 'explodyparrot.gif', 'fiestaparrot.gif', 'metalparrot.gif', 'revertitparrot.gif', 'tripletsparrot.gif', 'unicornparrot.gif' ]
-let listaCombinacao;
+
+const listaCartas = [
+  'bobrossparrot.gif', 
+  'explodyparrot.gif', 
+  'fiestaparrot.gif', 
+  'metalparrot.gif', 
+  'revertitparrot.gif', 
+  'tripletsparrot.gif', 
+  'unicornparrot.gif' 
+];
 
 function verificarNum(numero){
   if(numero >= 4 && numero <= 14 && (numero%2 === 0)){
@@ -19,10 +27,76 @@ function embaralharDeck(listCartas){
   return novaLista;
 }
 
-
 function pegarElemento(classe){
   const elemento = document.querySelector(classe);
   return elemento;
+}
+
+function revelarCarta(carta){
+  carta.classList.add('virar');
+  carta.setAttribute('onclick', '');
+  carta.querySelector('img:first-child').classList.add('esconder');
+  carta.querySelector('img:last-child').classList.remove('esconder');
+}
+
+function esconderCarta(carta){
+  carta.classList.remove('virar');
+  carta.setAttribute('onclick', 'verificarCartasIguais(this)');
+  carta.querySelector('img:first-child').classList.remove('esconder');
+  carta.querySelector('img:last-child').classList.add('esconder');
+}
+
+function desativarCartas(){
+  const cartas = document.querySelectorAll('.carta');
+
+  for(let i=0; i<cartas.length; i++){
+    cartas[i].setAttribute('onclick', '');
+  }
+}
+
+function ativarCartas(){
+  const cartas = document.querySelectorAll('.carta');
+
+  for(let i=0; i<cartas.length; i++){
+    cartas[i].setAttribute('onclick', 'verificarCartasIguais(this)');
+  }
+}
+
+function verificarFim(){
+  if(acertos == (numCartas/2)){
+    setTimeout(() => {
+      alert(`Você ganhou em ${jogadas} jogadas!`);
+    }, 500)
+  }
+}
+
+function verificarCartasIguais(carta){
+  jogadas ++;
+  revelarCarta(carta);
+
+  if(cartaSelecionada === ''){
+    cartaSelecionada = carta;
+  } else {
+
+    let itemCarta = carta.querySelector('img:last-child').getAttribute('src'); 
+    let itemCartaSelecionada = cartaSelecionada.querySelector('img:last-child').getAttribute('src'); 
+
+    if(itemCarta === itemCartaSelecionada){
+      console.log('iguais');
+      acertos ++;
+      cartaSelecionada = '';
+    }else{
+      console.log('diferente');
+      desativarCartas();
+      setTimeout(() => {
+        esconderCarta(cartaSelecionada);
+        esconderCarta(carta);
+        cartaSelecionada = '';
+        ativarCartas();
+      },"1000");
+    }
+  }
+  verificarFim();
 }
 
 function adicionarCartas(qntde){
@@ -49,62 +123,6 @@ function adicionarCartas(qntde){
     `;
   }
 
-}
-
-function revelarCarta(carta){
-  carta.classList.add('virar');
-  carta.querySelector('img:first-child').classList.add('esconder');
-  carta.querySelector('img:last-child').classList.remove('esconder');
-}
-
-function esconderCarta(carta){
-  carta.classList.remove('virar');
-  carta.querySelector('img:first-child').classList.remove('esconder');
-  carta.querySelector('img:last-child').classList.add('esconder');
-}
-
-function desativarCartas(){
-
-  const cartas = document.querySelectorAll('.carta');
-
-  for(let i=0; i<cartas.length; i++){
-    cartas[i].setAttribute('onclick', '');
-  }
-}
-
-function ativarCartas(){
-
-  const cartas = document.querySelectorAll('.carta');
-
-  for(let i=0; i<cartas.length; i++){
-    cartas[i].setAttribute('onclick', 'verificarCartasIguais(this)');
-  }
-}
-
-function verificarCartasIguais(carta){
-  revelarCarta(carta);
-
-  if(cartaSelecionada === ''){
-    cartaSelecionada = carta;
-  } else {
-
-    let itemCarta = carta.querySelector('img:last-child').getAttribute('src'); 
-    let itemCartaSelecionada = cartaSelecionada.querySelector('img:last-child').getAttribute('src'); 
-
-    if(itemCarta === itemCartaSelecionada){
-      console.log('iguais');
-      cartaSelecionada = '';
-    }else{
-      console.log('diferente');
-      desativarCartas();
-      setTimeout(() => {
-        esconderCarta(cartaSelecionada);
-        esconderCarta(carta);
-        cartaSelecionada = '';
-        ativarCartas();
-      },"1000");
-    }
-  }
 }
 
 do{
