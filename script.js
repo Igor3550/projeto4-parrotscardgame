@@ -1,4 +1,4 @@
-let numCartas, acertos=0, jogadas=0;
+let numCartas, acertos=0, jogadas=0, minutos=0, segundos=0;
 let cartaSelecionada = '';
 
 const listaCartas = [
@@ -36,14 +36,18 @@ function revelarCarta(carta){
   carta.classList.add('virar');
   carta.setAttribute('onclick', '');
   carta.querySelector('img:first-child').classList.add('esconder');
-  carta.querySelector('img:last-child').classList.remove('esconder');
+  setTimeout(()=>{
+    carta.querySelector('img:last-child').classList.remove('esconder');
+  }, '150')
 }
 
 function esconderCarta(carta){
   carta.classList.remove('virar');
   carta.setAttribute('onclick', 'verificarCartasIguais(this)');
-  carta.querySelector('img:first-child').classList.remove('esconder');
   carta.querySelector('img:last-child').classList.add('esconder');
+  setTimeout(()=>{
+    carta.querySelector('img:first-child').classList.remove('esconder');
+  },'150')
 }
 
 function desativarCartas(){
@@ -64,8 +68,12 @@ function ativarCartas(){
 
 function verificarFim(){
   if(acertos == (numCartas/2)){
+    if(segundos < 10){
+      segundos = '0'+segundos;
+    }
+    clearInterval(relogioIntervalo)
     setTimeout(() => {
-      alert(`Você ganhou em ${jogadas} jogadas!`);
+      alert(`Você ganhou em ${jogadas} jogadas! com tempo de 0${minutos}:${segundos}`);
     }, 500)
   }
 }
@@ -82,11 +90,11 @@ function verificarCartasIguais(carta){
     let itemCartaSelecionada = cartaSelecionada.querySelector('img:last-child').getAttribute('src'); 
 
     if(itemCarta === itemCartaSelecionada){
-      console.log('iguais');
+
       acertos ++;
       cartaSelecionada = '';
+
     }else{
-      console.log('diferente');
       desativarCartas();
       setTimeout(() => {
         esconderCarta(cartaSelecionada);
@@ -94,6 +102,7 @@ function verificarCartasIguais(carta){
         cartaSelecionada = '';
         ativarCartas();
       },"1000");
+
     }
   }
   verificarFim();
@@ -122,11 +131,38 @@ function adicionarCartas(qntde){
       </div>
     `;
   }
+}
 
+function atualizarRelogio(){
+  const minutosElemento = document.querySelector('.area-titulo .relogio span:first-child');
+  const segundosElemento = document.querySelector('.area-titulo .relogio span:last-child');
+
+  if(segundos >= 60){
+    segundos = 0
+    minutos ++;
+    if(minutos < 60){
+      segundosElemento.innerHTML = '0'+segundos;
+      minutosElemento.innerHTML = '0'+minutos;
+    }else{
+      segundosElemento.innerHTML = '0'+segundos;
+      minutosElemento.innerHTML = minutos;
+    }
+  }else{
+    if(segundos < 10){
+      segundosElemento.innerHTML = '0'+segundos;
+    }else{
+      segundosElemento.innerHTML = segundos;
+    }
+  }
 }
 
 do{
   numCartas = prompt("Com quantas cartas você deseja jogar?");
 }while(verificarNum(numCartas) == false);
+
+const relogioIntervalo = setInterval(()=>{
+  segundos ++;
+  atualizarRelogio();
+}, '1000');
 
 adicionarCartas(numCartas);

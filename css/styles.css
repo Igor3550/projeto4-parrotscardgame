@@ -13,8 +13,11 @@ body {
   justify-content: center;
 }
 .area-titulo .titulo {
-  margin: 40px 0;
+  margin: 50px 0;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .area-titulo .titulo h1{
   font-size: 56px;
@@ -45,6 +48,7 @@ body {
   align-items: center;
   justify-content: center;
   transition: transform .5s;
+  cursor: pointer;
 }
 .virar{
   transform: rotateY(180deg);
@@ -56,11 +60,39 @@ body {
 .esconder{
   opacity: 0;
 }
+.area-titulo > div{
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.relogio{
+  position: absolute;
+  width: 80px;
+  height: 50px;
+  right: -100px;
+  color: white;
+  font-weight: 700;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+}
 @media(max-width: 614px){
   .area-titulo .titulo h1{
     font-size: 36px;
   }
+  .area-titulo .titulo{
+    width: 90%;
+  }
   .cartas{
     width: 90%;
+  }
+  .relogio{
+    height: 40px;
+    width: 60px;
+    font-size: 14px;
+    right: 0px;
   }
 }
