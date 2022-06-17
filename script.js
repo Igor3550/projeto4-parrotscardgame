@@ -11,6 +11,11 @@ const listaCartas = [
   'unicornparrot.gif' 
 ];
 
+let relogioIntervalo = setInterval(()=>{
+  segundos ++;
+  atualizarRelogio();
+}, '1000');
+
 function verificarNum(numero){
   if(numero >= 4 && numero <= 14 && (numero%2 === 0)){
     return true;
@@ -74,6 +79,7 @@ function verificarFim(){
     clearInterval(relogioIntervalo)
     setTimeout(() => {
       alert(`Você ganhou em ${jogadas} jogadas! com tempo de 0${minutos}:${segundos}`);
+      fimDeJogo();
     }, 500)
   }
 }
@@ -121,8 +127,6 @@ function adicionarCartas(qntde){
 
   embaralharDeck(deckFinal);
 
-  console.log(deckFinal)
-
   for(let i=0; i<qntde; i++){
     areaCartas.innerHTML += `
       <div class="carta" onclick="verificarCartasIguais(this)">
@@ -156,13 +160,30 @@ function atualizarRelogio(){
   }
 }
 
-do{
-  numCartas = prompt("Com quantas cartas você deseja jogar?");
-}while(verificarNum(numCartas) == false);
+function fimDeJogo(){
 
-const relogioIntervalo = setInterval(()=>{
-  segundos ++;
-  atualizarRelogio();
-}, '1000');
+  let reiniciar = prompt('Deseja reiniciar o jogo?');
+  reiniciar = reiniciar.toLowerCase();
+  console.log(reiniciar);
 
-adicionarCartas(numCartas);
+  if(reiniciar == 'sim'){
+    document.querySelector('.cartas').innerHTML = '';
+    cartaSelecionada = '';
+    acertos=0; 
+    jogadas=0; 
+    minutos=0; 
+    segundos=0;
+    inciarJogo();
+  }
+}
+
+function inciarJogo(){
+  do{
+    numCartas = prompt("Com quantas cartas você deseja jogar?");
+  }while(verificarNum(numCartas) == false);
+  
+  adicionarCartas(numCartas);
+  relogioIntervalo = setInterval(()=>{});
+}
+
+inciarJogo();

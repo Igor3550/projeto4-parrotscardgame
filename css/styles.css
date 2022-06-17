@@ -50,6 +50,10 @@ body {
   transition: transform .5s;
   cursor: pointer;
 }
+.absolute{
+  position: absolute;
+  margin: 0;
+}
 .virar{
   transform: rotateY(180deg);
 }
