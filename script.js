@@ -40,19 +40,19 @@ function pegarElemento(classe){
 function revelarCarta(carta){
   carta.classList.add('virar');
   carta.setAttribute('onclick', '');
-  carta.querySelector('img:first-child').classList.add('esconder');
   setTimeout(()=>{
+    carta.querySelector('img:first-child').classList.add('esconder');
     carta.querySelector('img:last-child').classList.remove('esconder');
-  }, '150')
+  }, 100)
 }
 
 function esconderCarta(carta){
   carta.classList.remove('virar');
   carta.setAttribute('onclick', 'verificarCartasIguais(this)');
-  carta.querySelector('img:last-child').classList.add('esconder');
   setTimeout(()=>{
+    carta.querySelector('img:last-child').classList.add('esconder');
     carta.querySelector('img:first-child').classList.remove('esconder');
-  },'150')
+  }, 100)
 }
 
 function desativarCartas(){
@@ -129,7 +129,7 @@ function adicionarCartas(qntde){
 
   for(let i=0; i<qntde; i++){
     areaCartas.innerHTML += `
-      <div class="carta" onclick="verificarCartasIguais(this)">
+      <div class="carta absolute" onclick="verificarCartasIguais(this)">
         <img class="" src="/assets/front.png">
         <img class="esconder }" src="/assets/${deckFinal[i]}">
       </div>
@@ -154,17 +154,30 @@ function atualizarRelogio(){
   }else{
     if(segundos < 10){
       segundosElemento.innerHTML = '0'+segundos;
+      minutosElemento.innerHTML = '0'+minutos;
     }else{
+      minutosElemento.innerHTML = '0'+minutos;
       segundosElemento.innerHTML = segundos;
     }
   }
 }
 
-function fimDeJogo(){
+function verifyReiniciar(resp){
+  if(resp === 'sim' || resp === 'não'){
+    return true;
+  }else{
+    return false;
+  }
+}
 
-  let reiniciar = prompt('Deseja reiniciar o jogo?');
-  reiniciar = reiniciar.toLowerCase();
-  console.log(reiniciar);
+function fimDeJogo(){
+  let reiniciar = ''
+
+  do {
+    reiniciar = prompt('Deseja reiniciar o jogo?');
+    reiniciar = reiniciar.toLowerCase();
+  }while(!verifyReiniciar(reiniciar));
+
 
   if(reiniciar == 'sim'){
     document.querySelector('.cartas').innerHTML = '';
@@ -177,13 +190,25 @@ function fimDeJogo(){
   }
 }
 
+function animacaoInicio(){
+  let cartas = document.querySelectorAll('.carta')
+
+  for(let i=0; i<cartas.length; i++){
+    cartas[i].classList.toggle('absolute');
+  }
+}
+
 function inciarJogo(){
   do{
     numCartas = prompt("Com quantas cartas você deseja jogar?");
   }while(verificarNum(numCartas) == false);
-  
+
   adicionarCartas(numCartas);
   relogioIntervalo = setInterval(()=>{});
+
+  setTimeout(() => {
+    animacaoInicio()
+  }, '100')
 }
 
 inciarJogo();

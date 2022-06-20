@@ -51,8 +51,7 @@ body {
   cursor: pointer;
 }
 .absolute{
-  position: absolute;
-  margin: 0;
+  transform: translate(0px, -1000px);
 }
 .virar{
   transform: rotateY(180deg);
